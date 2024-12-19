@@ -7,9 +7,9 @@ import javax.swing.border.*;
 
 public class MainFrame extends JFrame implements ActionListener, Runnable {
 
-    private int maxTime = 10;
+    private int maxTime = 180;
     public int time = maxTime;
-    private int row = 8, col = 8;
+    private int row = 8, col = 8; //hàng và cột nhân vào phải chia hết cho 2, nếu không trò chơi sẽ luôn dư thừa 1 icon
     public JLabel lbScore;
     private JProgressBar progressTime;
     private ButtonEvent graphicsPanel;
@@ -19,16 +19,18 @@ public class MainFrame extends JFrame implements ActionListener, Runnable {
     private boolean pause = false;
     private boolean resume = false;
 
+    //tạo giao diện chính
     public MainFrame() {
         add(mainPanel = createMainPanel());
         setTitle("Waifu Archie");
-        setResizable(false);
+        setResizable(false); //không cho người chơi thay đổi kích thước cửa sổ
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 650);
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
+    //hàm giao diện
     private JPanel createMainPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(createGraphicPanel(), BorderLayout.CENTER);
@@ -37,6 +39,7 @@ public class MainFrame extends JFrame implements ActionListener, Runnable {
         return panel;
     }
 
+    //hàm chứa giao diện trò chơi
     private JPanel createGraphicPanel() {
         graphicsPanel = new ButtonEvent(this, row, col);
         JPanel panel = new JPanel(new GridBagLayout());
@@ -45,6 +48,7 @@ public class MainFrame extends JFrame implements ActionListener, Runnable {
         return panel;
     }
 
+    //bảng điều khiển
     private JPanel createControlPanel() {
         lbScore = new JLabel("0");
         progressTime = new JProgressBar(0, 100);
@@ -87,6 +91,7 @@ public class MainFrame extends JFrame implements ActionListener, Runnable {
         return panel;
     }
 
+    //hàm bắt đầu trò chơi mới
     public void newGame() {
         time = maxTime;
         graphicsPanel.removeAll();
@@ -99,6 +104,7 @@ public class MainFrame extends JFrame implements ActionListener, Runnable {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btNewGame) {
+            //nếu người chơi chọn bắt đầu trò chơi mới mà chưa hoàn thành trò chơi hiện tại, hiển thị thông báo
             showDialogNewGame("Your game hasn't done. Do you want to create a new game?", "Warning", 0);
         }
     }
@@ -121,15 +127,15 @@ public class MainFrame extends JFrame implements ActionListener, Runnable {
         int select = JOptionPane.showOptionDialog(null, message, title,
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
                 null, null);
-        if (select == 0) {
+        if (select == 0) { //nếu người chơi chọn yes, bắt đầu trò chơi mới
             pause = false;
             newGame();
             return true;
         } else {
-            if (t == 1) {
+            if (t == 1) { //nếu người chơi chọn no, trở về tiến trình game hiện tại
                 System.exit(0);
                 return false;
-            } else {
+            } else { //nếu đóng cửa sổ, trở về tiến trình game hiện tại
                 resume = true;
                 return true;
             }
