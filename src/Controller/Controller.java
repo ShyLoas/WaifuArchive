@@ -9,6 +9,7 @@ public class Controller {
     private int[][] matrix;
     MainFrame frame;
 
+    //khởi tạo constructor của hàm controller
     public Controller(MainFrame frame, int row, int col) {
         this.frame = frame;
         this.row = row;
@@ -16,14 +17,17 @@ public class Controller {
         createMatrix();
     }
 
+    //tạo ma trận để xử lí hai icon
     public void createMatrix() {
         matrix = new int[row][col];
+        //gán giá trị 0 cho các hàng và cột ngoài rìa
         for (int i = 0; i < col; i++) {
             matrix[0][i] = matrix[row - 1][i] = 0;
         }
         for (int i = 0; i < row; i++) {
             matrix[i][0] = matrix[i][col - 1] = 0;
         }
+        //tạo danh sách các button theo icon khả dụng
         Random random = new Random();
         int imgCount = 14, max = imgCount / 2, arr[] = new int[imgCount + 1];
         ArrayList<Point> listPoint = new ArrayList<Point>();
@@ -33,6 +37,7 @@ public class Controller {
             }
         }
         int i = 0;
+        //phân phối ngẫu nhiên các icon
         do {
             int index = random.nextInt(imgCount) + 1;
             if (arr[index] < max) {
@@ -48,9 +53,10 @@ public class Controller {
                 }
                 i++;
             }
-        } while (i < row * col / 2);
+        } while (i < row * col / 2); //lặp lại cho đến khi đã phân phối các icon cho đến khi chia hết cho 2
     }
 
+    //kiểm tra đường thẳng theo hàng
     private boolean checkX(int y1, int y2, int x) {
         int min = Math.min(y1, y2);
         int max = Math.max(y1, y2);
@@ -63,6 +69,7 @@ public class Controller {
         return true;
     }
 
+    //kiểm tra đường thẳng theo cột
     private boolean checkY(int x1, int x2, int y) {
         int min = Math.min(x1, x2);
         int max = Math.max(x1, x2);
@@ -75,6 +82,7 @@ public class Controller {
         return true;
     }
 
+    //kiểm tra đường nối 3 điểm theo hình chữ nhật theo chiều ngang sau đó đến dọc
     private boolean checkRectX(Point p1, Point p2) {
         Point pMinY = p1, pMaxY = p2;
         if (p1.y > p2.y) {
@@ -94,6 +102,7 @@ public class Controller {
         return false;
     }
 
+    //kiểm tra đường nối 3 điểm theo hình chữ nhật theo chiều dọc trước sau đó đến ngang
     private boolean checkRectY(Point p1, Point p2) {
         Point pMinX = p1, pMaxX = p2;
         if (p1.x > p2.x) {
@@ -113,6 +122,7 @@ public class Controller {
         return false;
     }
 
+    //kiểm tra 3 góc phức tạp theo chiều ngang
     private boolean checkMoreLineX(Point p1, Point p2, int type) {
         Point pMinY = p1, pMaxY = p2;
         if (p1.y > p2.y) {
@@ -140,6 +150,7 @@ public class Controller {
         return false;
     }
 
+    //kiểm tra 3 góc phức tạp theo chiều dọc
     private boolean checkMoreLineY(Point p1, Point p2, int type) {
         Point pMinX = p1, pMaxX = p2;
         if (p1.x > p2.x) {
@@ -167,6 +178,7 @@ public class Controller {
         return false;
     }
 
+    //kiểm tra xem hai điểm có trùng nhau hay không
     public PointLine checkTwoPoint(Point p1, Point p2) {
         if (!p1.equals(p2) && matrix[p1.x][p1.y] == matrix[p2.x][p2.y]) {
             if (p1.x == p2.x) {
