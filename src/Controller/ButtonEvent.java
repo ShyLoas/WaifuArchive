@@ -22,7 +22,7 @@ public class ButtonEvent extends JPanel implements ActionListener {
         this.frame = frame;
         this.row = row + 2;
         this.col = col + 2;
-        item = row * col / 2;
+        item = row * col / 2;//
 
         setLayout(new GridLayout(row, col, bound, bound));
         setBackground(Color.decode("#C6E7DE"));
