@@ -22,7 +22,7 @@ public class ButtonEvent extends JPanel implements ActionListener {
         this.frame = frame;
         this.row = row + 2;
         this.col = col + 2;
-        item = row * col / 2;//
+        item = row * col / 2; //đảm bảo các icon luôn chia hết cho 2 nhằm xác định 2 icon trùng nhau
 
         setLayout(new GridLayout(row, col, bound, bound));
         setBackground(Color.decode("#C6E7DE"));
@@ -30,9 +30,10 @@ public class ButtonEvent extends JPanel implements ActionListener {
         setBorder(new EmptyBorder(10, 10, 10, 10));
         setAlignmentY(JPanel.CENTER_ALIGNMENT);
 
-        newGame();
+        newGame(); //bắt đầu trò chơi mới
     }
 
+    //tạo nút cho mảng
     private void addArrayButton() {
         btn = new JButton[row][col];
         for (int i = 1; i < row - 1; i++) {
@@ -45,6 +46,7 @@ public class ButtonEvent extends JPanel implements ActionListener {
         }
     }
 
+    //hàm lấy hình ảnh cho icon từ folder sources
     private Icon getIcon(int index) {
         int width = 70, height = 70;
         Image image = new ImageIcon(getClass().getResource(
@@ -54,6 +56,7 @@ public class ButtonEvent extends JPanel implements ActionListener {
         return icon;
     }
 
+    //hàm tạo nút
     private JButton createButton(String action) {
         JButton bt = new JButton();
         bt.setActionCommand(action);
@@ -62,11 +65,13 @@ public class ButtonEvent extends JPanel implements ActionListener {
         return bt;
     }
 
+    //đổi màu nền cho trùng với background khi hai nút chính xác
     public void execute(Point p1, Point p2) {
         setDisable(btn[p1.x][p1.y]);
         setDisable(btn[p2.x][p2.y]);
     }
 
+    //hàm set nút trùng với màu nền
     private void setDisable(JButton btn) {
         btn.setIcon(null);
         btn.setBackground(Color.decode("#C6E7DE"));
@@ -79,16 +84,16 @@ public class ButtonEvent extends JPanel implements ActionListener {
         int indexDot = btnIndex.lastIndexOf(",");
         int x = Integer.parseInt(btnIndex.substring(0, indexDot));
         int y = Integer.parseInt(btnIndex.substring(indexDot + 1, btnIndex.length()));
-        if (p1 == null) {
-            p1 = new Point(x, y);
-            btn[p1.x][p1.y].setBorder(new LineBorder(Color.RED));
+        if (p1 == null) { //nếu nút được chọn
+            p1 = new Point(x, y); //tạo điểm cho nút đó
+            btn[p1.x][p1.y].setBorder(new LineBorder(Color.RED)); //set màu viền thành đỏ để người chơi dễ xasc định 
         } else {
-            p2 = new Point(x, y);
-            line = algorithm.checkTwoPoint(p1, p2);
+            p2 = new Point(x, y); //tạo điểm cho nút 2 sau khi nút 1 được chọn
+            line = algorithm.checkTwoPoint(p1, p2); //kiểm tra xem hai nút đó có trùng hay không
             if (line != null) {
                 algorithm.getMatrix()[p1.x][p1.y] = 0;
                 algorithm.getMatrix()[p2.x][p2.y] = 0;
-                execute(p1, p2);
+                execute(p1, p2); //xoá hai điểm trong ma trận
                 line = null;
                 score += 20;
                 item--;
@@ -98,13 +103,14 @@ public class ButtonEvent extends JPanel implements ActionListener {
             btn[p1.x][p1.y].setBorder(null);
             p1 = null;
             p2 = null;
-            if (item == 0) {
+            if (item == 0) { //nếu không còn icon nào, game sẽ hiện thông báo
                 if (frame.showDialogNewGame("You are winner!\nDo you want play again?", "Win", 1) == true) {
                 }
             }
         }
     }
 
+    //hàm tạo game mới
     public void newGame() {
         algorithm = new Controller(this.frame, this.row, this.col);
         addArrayButton();
